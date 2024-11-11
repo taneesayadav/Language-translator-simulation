@@ -1,0 +1,244 @@
+package com.languagetranslation.models;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+public class LanguageTranslationSystem {
+
+    // User class
+    public static class User {
+        private int userId;
+        private String firstName;
+        private String lastName;
+        private String email;
+        private String phoneNumber;
+
+        // Constructor
+        public User(int userId, String firstName, String lastName, String email, String phoneNumber) {
+            this.userId = userId;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
+            this.phoneNumber = phoneNumber;
+        }
+
+        // Getters and Setters
+        public int getUserId() {
+            return userId;
+        }
+
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
+
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getPhoneNumber() {
+            return phoneNumber;
+        }
+
+        public void setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+        }
+    }
+
+    // Language class
+    public static class Language {
+        private int languageId;
+        private String languageName;
+
+        // Constructor
+        public Language(int languageId, String languageName) {
+            this.languageId = languageId;
+            this.languageName = languageName;
+        }
+
+        // Getters and Setters
+        public int getLanguageId() {
+            return languageId;
+        }
+
+        public void setLanguageId(int languageId) {
+            this.languageId = languageId;
+        }
+
+        public String getLanguageName() {
+            return languageName;
+        }
+
+        public void setLanguageName(String languageName) {
+            this.languageName = languageName;
+        }
+    }
+
+    // TextEntry class
+    public static class TextEntry {
+        private int entryId;
+        private String originalText;
+        private int originalLanguageId;
+        private int submittedBy;
+        private LocalDateTime createdAt;
+
+        // Constructor
+        public TextEntry(int entryId, String originalText, int originalLanguageId, int submittedBy, LocalDateTime createdAt) {
+            this.entryId = entryId;
+            this.originalText = originalText;
+            this.originalLanguageId = originalLanguageId;
+            this.submittedBy = submittedBy;
+            this.createdAt = createdAt;
+        }
+
+        // Getters and Setters
+        public int getEntryId() {
+            return entryId;
+        }
+
+        public void setEntryId(int entryId) {
+            this.entryId = entryId;
+        }
+
+        public String getOriginalText() {
+            return originalText;
+        }
+
+        public void setOriginalText(String originalText) {
+            this.originalText = originalText;
+        }
+
+        public int getOriginalLanguageId() {
+            return originalLanguageId;
+        }
+
+        public void setOriginalLanguageId(int originalLanguageId) {
+            this.originalLanguageId = originalLanguageId;
+        }
+
+        public int getSubmittedBy() {
+            return submittedBy;
+        }
+
+        public void setSubmittedBy(int submittedBy) {
+            this.submittedBy = submittedBy;
+        }
+
+        public LocalDateTime getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+        }
+    }
+
+    // Translation class
+    public static class Translation {
+        private int translationId;
+        private int entryId;
+        private String translatedText;
+        private int translatedLanguageId;
+        private int translatedBy;
+        private LocalDateTime translatedAt;
+
+        // Constructor
+        public Translation(int translationId, int entryId, String translatedText, int translatedLanguageId, int translatedBy, LocalDateTime translatedAt) {
+            this.translationId = translationId;
+            this.entryId = entryId;
+            this.translatedText = translatedText;
+            this.translatedLanguageId = translatedLanguageId;
+            this.translatedBy = translatedBy;
+            this.translatedAt = translatedAt;
+        }
+
+        // Getters and Setters
+        public int getTranslationId() {
+            return translationId;
+        }
+
+        public void setTranslationId(int translationId) {
+            this.translationId = translationId;
+        }
+
+        public int getEntryId() {
+            return entryId;
+        }
+
+        public void setEntryId(int entryId) {
+            this.entryId = entryId;
+        }
+
+        public String getTranslatedText() {
+            return translatedText;
+        }
+
+        public void setTranslatedText(String translatedText) {
+            this.translatedText = translatedText;
+        }
+
+        public int getTranslatedLanguageId() {
+            return translatedLanguageId;
+        }
+
+        public void setTranslatedLanguageId(int translatedLanguageId) {
+            this.translatedLanguageId = translatedLanguageId;
+        }
+
+        public int getTranslatedBy() {
+            return translatedBy;
+        }
+
+        public void setTranslatedBy(int translatedBy) {
+            this.translatedBy = translatedBy;
+        }
+
+        public LocalDateTime getTranslatedAt() {
+            return translatedAt;
+        }
+
+        public void setTranslatedAt(LocalDateTime translatedAt) {
+            this.translatedAt = translatedAt;
+        }
+    }
+
+    // Main method to test the functionality
+    public static void main(String[] args) {
+        // Create sample user
+        User user = new User(1, "John", "Doe", "john.doe@example.com", "1234567890");
+
+        // Create sample language
+        Language english = new Language(1, "English");
+        Language spanish = new Language(2, "Spanish");
+
+        // Create sample text entry
+        TextEntry textEntry = new TextEntry(1, "Hello, how are you?", english.getLanguageId(), user.getUserId(), LocalDateTime.now());
+
+        // Create sample translation
+        Translation translation = new Translation(1, textEntry.getEntryId(), "Hola, ¿cómo estás?", spanish.getLanguageId(), user.getUserId(), LocalDateTime.now());
+
+        // Print details
+        System.out.println("User: " + user.getFirstName() + " " + user.getLastName());
+        System.out.println("Original Text: " + textEntry.getOriginalText());
+        System.out.println("Translated Text: " + translation.getTranslatedText());
+    }
+}
