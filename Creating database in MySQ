@@ -1,0 +1,58 @@
+-- Create the database
+CREATE DATABASE language_translation_system;
+USE language_translation_system;
+
+-- Create the Users table (Optional: For managing translators or users contributing translations)
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(50) NOT NULL,
+    last_name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    phone VARCHAR(15),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create the Languages table (List of supported languages)
+CREATE TABLE Languages (
+    language_id INT AUTO_INCREMENT PRIMARY KEY,
+    language_name VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Create the Text_Entries table (Original texts that need translation)
+CREATE TABLE Text_Entries (
+    entry_id INT AUTO_INCREMENT PRIMARY KEY,
+    original_text TEXT NOT NULL,
+    original_language_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (original_language_id) REFERENCES Languages(language_id) ON DELETE CASCADE
+);
+
+-- Create the Translations table (Stores the translations for each text)
+CREATE TABLE Translations (
+    translation_id INT AUTO_INCREMENT PRIMARY KEY,
+    entry_id INT NOT NULL,
+    translated_text TEXT NOT NULL,
+    translated_language_id INT NOT NULL,
+    translator_id INT,  -- Optional: If a user contributed this translation
+    translated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (entry_id) REFERENCES Text_Entries(entry_id) ON DELETE CASCADE,
+    FOREIGN KEY (translated_language_id) REFERENCES Languages(language_id) ON DELETE CASCADE,
+    FOREIGN KEY (translator_id) REFERENCES Users(user_id) ON DELETE SET NULL
+);
+
+-- Create the User_Translations table (Optional: Tracks user-contributed translations)
+CREATE TABLE User_Translations (
+    user_translation_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    translation_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (translation_id) REFERENCES Translations(translation_id) ON DELETE CASCADE
+);
+
+-- Query translations for a specific original text and language pair
+SELECT t.translation_id, t.translated_text, l.language_name AS translated_language, t.translated_at
+FROM Translations t
+JOIN Languages l ON t.translated_language_id = l.language_id
+JOIN Text_Entries e ON t.entry_id = e.entry_id
+WHERE e.original_text = 'Hello' AND e.original_language_id = (SELECT language_id FROM Languages WHERE language_name = 'English') 
+AND t.translated_language_id = (SELECT language_id FROM Languages WHERE language_name = 'Spanish');
