@@ -1,0 +1,59 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class TranslationDAO {
+    // Adds a new translation entry to the database
+    public void addTranslation(String originalText, String translatedText, String sourceLang, String targetLang) throws SQLException {
+        String query = "INSERT INTO translations (original_text, translated_text, source_lang, target_lang) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, originalText);
+            stmt.setString(2, translatedText);
+            stmt.setString(3, sourceLang);
+            stmt.setString(4, targetLang);
+            stmt.executeUpdate();
+        }
+    }
+
+    // Retrieves a translation based on the original text and language pair
+    public void getTranslation(String originalText, String sourceLang, String targetLang) throws SQLException {
+        String query = "SELECT * FROM translations WHERE original_text = ? AND source_lang = ? AND target_lang = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, originalText);
+            stmt.setString(2, sourceLang);
+            stmt.setString(3, targetLang);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                System.out.println("Original Text: " + rs.getString("original_text"));
+                System.out.println("Translated Text: " + rs.getString("translated_text"));
+            }
+        }
+    }
+
+    // Updates an existing translation
+    public void updateTranslation(int id, String originalText, String translatedText, String sourceLang, String targetLang) throws SQLException {
+        String query = "UPDATE translations SET original_text = ?, translated_text = ?, source_lang = ?, target_lang = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, originalText);
+            stmt.setString(2, translatedText);
+            stmt.setString(3, sourceLang);
+            stmt.setString(4, targetLang);
+            stmt.setInt(5, id);
+            stmt.executeUpdate();
+        }
+    }
+
+    // Deletes a translation entry based on the ID
+    public void deleteTranslation(int id) throws SQLException {
+        String query = "DELETE FROM translations WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
+    }
+}
